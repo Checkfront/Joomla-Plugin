@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="content" method="upgrade">
+	<updateservers>
+		<server type="extension" name="Checkfront Updates"
+			priority="2">http://www.checkfront.com/joomla-updates.xml</server>
+	</updateservers>
+	<name>Checkfront Booking Plugin</name>
+	<creationDate>March 13 2010</creationDate>
+	<author>Checkfront Inc</author>
+	<copyright>Copyright (C) 2008 - 2012 Checkfront Inc. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>support@checkfront.com</authorEmail>
+	<authorUrl>http://www.checkfront.com</authorUrl>
+	<version>2.5</version>
+	<description>
+		<![CDATA[
+		Checkfront is an online Availability, Reservation and Booking System. This plugin integrates a real time booking engine into your Joomla site. You get the robust publishing capabilities of Joomla combined with the power and security of the Checkfront back-office app.<br /><br />For more informatioin and setup help see:
+		<a href='http://www.checkfront.com/joomla'>www.checkfront.com/joomla</a><br /><br /><a href="http://www.checkfront.com/"><img src='//media.checkfront.com/images/brand/Checkfront-Logo-Tag-60.png' alt="Checkfront"></a>
+		]]>
+	</description>
+	<files>
+		<filename plugin="checkfront">checkfront.php</filename>
+		<filename>pipe.html</filename>
+		<filename>CheckfrontWidget.php</filename>
+		<folder>language</folder>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+			            <field name="interface" type="radio"
+							default="v2"
+							description="Rendering Interface"
+							label="PLG_CONTENT_CHECKFRONT_INTERFACE_LBL"
+							>
+							<option value="v2">PLG_CONTENT_CHECKFRONT_INTERFACE_V2</option>
+							<option value="v1">PLG_CONTENT_CHECKFRONT_INTERFACE_V1</option>
+						</field>
+			            <field name="CF_url" type="text"
+							default=""
+							description="Your Checkfront URL, EG: demo.checkfront.com"
+							label="PLG_CONTENT_CHECKFRONT_URL_LBL"
+							>
+						</field>
+			            <field name="background" type="text"
+							default=""
+							description="optional background color: (eg #FFFFFF)"
+							label="PLG_CONTENT_CHECKFRONT_BG_LBL"
+							>
+						</field>
+			            <field name="color" type="text"
+							default=""
+							description="optional font color: (eg #000000)"
+							label="PLG_CONTENT_CHECKFRONT_CLR_LBL"
+							>
+						</field>
+			            <field name="font" type="text"
+							default=""
+							description="optional font family (eg Tahoma)"
+							label="PLG_CONTENT_CHECKFRONT_FONT_LBL"
+							>
+						</field>
+			            <field name="options" type="checkboxes"
+							default="v2"
+							description="Rendering Interface"
+							label="PLG_CONTENT_CHECKFRONT_OPTIONS_LBL"
+							>
+							<option value="tabs">PLG_CONTENT_CHECKFRONT_TABS_OPT</option>
+							<option value="compact">PLG_CONTENT_CHECKFRONT_COMPACT_OPT</option>
+							<option value="grid">PLG_CONTENT_CHECKFRONT_GRID_OPT</option>
+						</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
