@@ -148,6 +148,8 @@ class plgContentCheckfront extends JPlugin {
 		} else {
 			$atts = ltrim($text);
 		}
-		$cnf = array_merge($cnf,$atts);
+		if(is_array($atts)) {
+			$cnf = array_merge($cnf,$atts);
+		}
 	}
 }
