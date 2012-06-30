@@ -8,7 +8,7 @@ of Joomla with the power of Checkfront.
 
 This plugin is for Joomla 1.6 or greater (tested to 2.5).  
 
-Except as otherwise noted, the Checkfront PHP Wordpress Plugin is licensed under the Apache Licence, Version 2.0
+Except as otherwise noted, the Checkfront Joomla Plugin is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html)
 
 Usage
@@ -16,9 +16,6 @@ Usage
 
 Once installed and configured, you can render a booking window anywhere in your site by creating a new article, and 
 supplying the checkfront shortcode: {checkfront}. 
-
-== Example ==
-
 
 ```html
 <h2>Booking Online!</h2>
