@@ -54,12 +54,12 @@
 
 class CheckfrontWidget {
 
-	public $lib_version = '2.1';
-	public $interface_lib_version = '2.1';
+	public $version = '2.2';
+	public $interface = 'v1'; //v2 recommended
+	public $interface_version = '2.5';
 	public $host= '';
 	public $src = '';
 	public $plugin_url = '';
-	public $interface = 'v1'; //v2 recommended
 	public $legacy_mode='inline';
 	public $embed = false;
 
@@ -169,10 +169,10 @@ class CheckfrontWidget {
     */
 	private function clean($cnf) {
 		foreach($cnf as $cnf_id => $data) {
-			$data = preg_replace("/\#|'/",'',strip_tags($data));
+			$data = preg_replace("/\#|'|>|</",'',strip_tags($data));
 			$cnf[$cnf_id] = $data;
 		}
-		return $cnf;
+		return $cnf;   
 	}
 
     /**
@@ -217,8 +217,8 @@ class CheckfrontWidget {
     */
 	private function v2_interface($cnf) {
 		$cnf['widget_id'] = (isset($cnf['widget_id']) and $cnf['widget_id'] > 0) ? $cnf['widget_id'] : '01';
-		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->lib_version}-->\n";
-		$html .= '<div id="CHECKFRONT_WIDGET_' . $cnf['widget_id'] . '"><p id="CHECKFRONT_LOADER" style="background: url(\'//' . $this->host . '/images/loader.gif\') left center no-repeat; padding: 5px 5px 5px 20px">' . $this->load_msg . '...</p></div><noscript><a href="https://' . $this->host . '/reserve/" style="font-size: 16px">' . $this->continue_msg . ' &raquo;</a></noscript>';
+		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->interface_version}-->\n";
+		$html .= '<div id="CHECKFRONT_WIDGET_' . $cnf['widget_id'] . '"><p id="CHECKFRONT_LOADER" style="background: url(\'//' . $this->host . '/images/loader.gif\') left center no-repeat; padding: 5px 5px 5px 20px">' . $this->load_msg . '...</p></div>';
 		$html .= "\n<script type='text/javascript'>\nnew CHECKFRONT.Widget ({\n";
 		$html .= "host: '{$this->host}',\n";
 		$html .= "pipe: '{$this->pipe_url}',\n";
@@ -227,10 +227,10 @@ class CheckfrontWidget {
 		// optional, or default items.  can be sku or category_id
 		if(isset($cnf['item_id'])) {
 			$cnf['item_id'] = $this->set_ids($cnf['item_id']);
-			$html .= "item_id: '{$cnf['category_id']}',\n";
+			$html .= "item_id: '{$cnf['item_id']}',\n";
 		}
 		//optional category_id(s)
-		if(isset($cnf['category_id']) and $cnf['category_id'] > 0) {
+		if(isset($cnf['category_id'])) {
 			$cnf['category_id'] = $this->set_ids($cnf['category_id']);
 			$html .= "category_id: '{$cnf['category_id']}',\n";
 		}	
@@ -240,9 +240,10 @@ class CheckfrontWidget {
 		if(isset($cnf['tid']))  $html .= "tid: '{$cnf['tid']}',\n";
 		if(isset($cnf['options']))  $html.= "options: '{$cnf['options']}',\n";
 		if(isset($cnf['date']))  $html.= "date: '{$cnf['date']}',\n";
-		if(isset($cnf['style']))  $html .= "style: '{$cnf['style']}',";
-		$html .= "\nprovider: '{$this->provider}'\n";
+		if(isset($cnf['style']))  $html .= "style: '{$cnf['style']}',\n";
+		$html .= "provider: '{$this->provider}'\n";
 		$html .="}).render();\n</script>\n";
+		$html .= '<noscript><a href="https://' . $this->host . '/reserve/" style="font-size: 16px">' . $this->continue_msg . ' &raquo;</a></noscript>' . "\n";
 		return $html;
 	}	
 
