@@ -3,7 +3,7 @@ ini_set('display_errors','On');
 /**
 * @package		Joomla.Plugin
 * @subpackage   Content.Checkfront
-* @version 	    2.0
+* @version 	    2.1
 * @copyright	Copyright (C) 2005 - 2012 Open Source Matters. All rights reserved.
 * @license		GNU/GPL, see LICENSE.php
 * @link 		https://github.com/Checkfront/Joomla-Plugin
@@ -74,7 +74,7 @@ class plgContentCheckfront extends JPlugin {
 			}
 
 			if($font = $this->params->def('font', 0)) {
-				$style[]= "font-family:{$background}";
+				$style[]= "font-family:{$font}";
 			}
 
 			if(count($style)) {

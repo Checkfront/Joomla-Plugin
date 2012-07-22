@@ -56,20 +56,20 @@ class CheckfrontWidget {
 
 	public $version = '2.2';
 	public $interface = 'v1'; //v2 recommended
-	public $interface_version = '2.5';
+	public $interface_build = '7';
 	public $host= '';
 	public $src = '';
 	public $plugin_url = '';
 	public $legacy_mode='inline';
-	public $embed = false;
 
-	public $widget = false;
 	public $book_url = '';
 	public $api_url = '';
 
 	public $load_msg = 'Searching Availability';
 	public $continue_msg = 'Continue to Secure Booking System';
 	public $offline_msg= 'Bookings not yet available here.';
+
+	public $arg = array(); 
 
 
 	function __construct($cnf) {
@@ -215,9 +215,26 @@ class CheckfrontWidget {
      * @param array $cnf shortcode paramaters
      * @return string $html rendering code
     */
-	private function v2_interface($cnf) {
+	private function v2_interface($arg=array()) {
+
+		$cnf = array(
+			'widget_id'=>'',
+			'item_id'=>'',
+			'category_id'=>'',
+			'theme'=>'',
+			'layout'=>'',
+			'tid'=>'',
+			'options'=>'',
+			'date'=>'',
+			'style'=>''
+		);
+
+		if(count($arg)) {
+			$cnf = array_merge($cnf,$arg);
+		}
+
 		$cnf['widget_id'] = (isset($cnf['widget_id']) and $cnf['widget_id'] > 0) ? $cnf['widget_id'] : '01';
-		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->interface_version}-->\n";
+		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->interface_build}-->\n";
 		$html .= '<div id="CHECKFRONT_WIDGET_' . $cnf['widget_id'] . '"><p id="CHECKFRONT_LOADER" style="background: url(\'//' . $this->host . '/images/loader.gif\') left center no-repeat; padding: 5px 5px 5px 20px">' . $this->load_msg . '...</p></div>';
 		$html .= "\n<script type='text/javascript'>\nnew CHECKFRONT.Widget ({\n";
 		$html .= "host: '{$this->host}',\n";
@@ -225,22 +242,22 @@ class CheckfrontWidget {
 		$html .= "target: 'CHECKFRONT_WIDGET_{$cnf['widget_id']}',\n";
 
 		// optional, or default items.  can be sku or category_id
-		if(isset($cnf['item_id'])) {
+		if($cnf['item_id']) {
 			$cnf['item_id'] = $this->set_ids($cnf['item_id']);
 			$html .= "item_id: '{$cnf['item_id']}',\n";
 		}
 		//optional category_id(s)
-		if(isset($cnf['category_id'])) {
+		if($cnf['category_id']) {
 			$cnf['category_id'] = $this->set_ids($cnf['category_id']);
 			$html .= "category_id: '{$cnf['category_id']}',\n";
 		}	
-		if(isset($cnf['theme'])) $html .= "theme: '{$this->theme}',\n";
-		if(isset($cnf['width']) and $cnf['width'] > 0)  $html .= "width: '{$cnf['width']}',\n";
-		if(isset($cnf['layout']))  $html .= "layout: '{$cnf['layout']}',\n";
-		if(isset($cnf['tid']))  $html .= "tid: '{$cnf['tid']}',\n";
-		if(isset($cnf['options']))  $html.= "options: '{$cnf['options']}',\n";
-		if(isset($cnf['date']))  $html.= "date: '{$cnf['date']}',\n";
-		if(isset($cnf['style']))  $html .= "style: '{$cnf['style']}',\n";
+		if($cnf['theme']) $html .= "theme: '{$this->theme}',\n";
+		if($cnf['width'] and $cnf['width'] > 0)  $html .= "width: '{$cnf['width']}',\n";
+		if($cnf['layout'])  $html .= "layout: '{$cnf['layout']}',\n";
+		if($cnf['tid'])  $html .= "tid: '{$cnf['tid']}',\n";
+		if($cnf['options'])  $html.= "options: '{$cnf['options']}',\n";
+		if($cnf['date'])  $html.= "date: '{$cnf['date']}',\n";
+		if($cnf['style'])  $html .= "style: '{$cnf['style']}',\n";
 		$html .= "provider: '{$this->provider}'\n";
 		$html .="}).render();\n</script>\n";
 		$html .= '<noscript><a href="https://' . $this->host . '/reserve/" style="font-size: 16px">' . $this->continue_msg . ' &raquo;</a></noscript>' . "\n";
