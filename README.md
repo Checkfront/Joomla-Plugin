@@ -1,4 +1,4 @@
-![Checkfront](https://media.checkfront.com/images/brand/Checkfront-Logo-Tag-40.png)
+![Checkfront](https://media.checkfront.com/images/brand/Checkfront-Logo-Tag-60.png)
 Checkfront Joomla Booking Plugin
 ==========================
 

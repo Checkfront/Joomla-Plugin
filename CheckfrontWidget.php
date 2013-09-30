@@ -54,8 +54,8 @@
 
 class CheckfrontWidget {
 
-	public $version = '2.3';
-	public $interface_build = '14';
+	public $version = '2.5';
+	public $interface_build = '15';
 	public $host= '';
 	public $src = '';
 	public $plugin_url = '';
