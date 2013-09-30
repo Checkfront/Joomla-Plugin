@@ -1,10 +1,9 @@
 <?php
-ini_set('display_errors','On');
 /**
 * @package		Joomla.Plugin
 * @subpackage   Content.Checkfront
-* @version 	    2.1
-* @copyright	Copyright (C) 2005 - 2012 Open Source Matters. All rights reserved.
+* @version 	    2.3
+* @copyright	Copyright (C) 2008-2013 Checkfront Inc. All rights reserved.
 * @license		GNU/GPL, see LICENSE.php
 * @link 		https://github.com/Checkfront/Joomla-Plugin
 * @link 		http://www.checkfront.com/joomla
@@ -29,6 +28,7 @@ ini_set('display_errors','On');
 class plgContentCheckfront extends JPlugin {
 
 	private $path = 'plugins/content/checkfront/';
+	
 	/**
 	 * @param   string  The context of the content being passed to the plugin.
 	 * @param   object  The article object.  Note $article->text is also available
@@ -46,89 +46,61 @@ class plgContentCheckfront extends JPlugin {
 			} else {
 				$link = '';
 			}
-			$article->text = preg_replace('/{checkfront(.*)}/iU', $link, $article->text);
+
+			$article->text = preg_replace('/[\[|{]checkfront(.*?)[\]|}]/iU', $link, $article->text);
 			return true;
 		}
-
-
-		$u =& JFactory::getURI();
-
-		$schema = $u->isSSL() ? 'https' : 'http';
-		if(preg_match('/{checkfront(.*)}/iU', $article->text,$match)) {
-			$plugin = & JPluginHelper::getPlugin('content', 'checkfront');
-
-			$cnf = array(
-				'style'=>'',
-				'category_id'=>'',
-				'item_id'=>'',
-				'options'=>'',
-			);
-
-			$style = array();
-			if($color = $this->params->def('color', 0)) {
-				$style[]= "color:{$color}";
-			}
-
-			if($background= $this->params->def('background', 0)) {
-				$style[]= "background-color:{$background}";
-			}
-
-			if($font = $this->params->def('font', 0)) {
-				$style[]= "font-family:{$font}";
-			}
-
-			if(count($style)) {
-				$cnf['style'] = implode(';',$style);
-			}
-			if($options= $this->params->def('options', 0)) {
-				$cnf['options'] = implode(',',$options);
-			}
 		
+		$article->text = preg_replace_callback('/[\[|{]checkfront(.*?)[\]|}]/iU', array($this, 'renderWidget'), $article->text, 1);
+	}
+	
+	
+	protected function renderWidget($shortcode) {
+		$url = $this->params->get('CF_url');
+		if(!preg_match('~^http://|https://~', $url)) $url = 'https://' . $url;		
+		$host = parse_url($url, PHP_URL_HOST );
 
-
-			$this->shortcode($match[1],$cnf);
-
-
-			// Load plugin params info
-			//
-			$url= $this->params->def('CF_url', 0);
-			$interface = $this->params->def('interface', 'v1');
-			$mode = $this->params->def('mode', 0);
-
-			if(!$url) {
-				$article->text = preg_replace('/{checkfront}/iU', '<p style="padding:1em; border: solid 1px firebrick; font-weight: bold;">Checkfront not configured</p>', $text );
-				return true;
-			}
-
-			$root_dir = JPATH_SITE . DS . 'plugins' . DS . 'content' . DS . 'checkfront'. DS;
-
-
-			$url = preg_replace('/[^\w\d\-\.]/','',$url);
-			$doc =& JFactory::getDocument();
-			include_once($root_dir. 'CheckfrontWidget.php');
-
-			if($interface == 'v2') {
-				$doc->addScript($schema . '://' . $url . '/lib/interface--4.js');
-			} else {
-				$doc->addScript($schema . '://' . $url . '/www/client.js?joomla');
-			}
-
-			$Checkfront = new CheckfrontWidget(
-				array(
-					'host'=>$url,
-					'pipe_url'=> JURI::base() . $this->path . 'pipe.html',
-					'interface' =>$interface,
-					'provider' =>'joomla',
-					'load_msg'=>JText::_('PLG_CONTENT_CHECKFRONT_SEARCHING_AVAILABILITY'),
-					'continue_msg'=>JText::_('PLG_CONTENT_CHECKFRONT_CONTINUE_BOOKING'),
-				)
-			);
-			$article->text = preg_replace('/{checkfront(.*)}/iU', $Checkfront->render($cnf), $article->text);
-			return true;
+		if (!$host) {
+			return '<p style="padding:1em; border: solid 1px firebrick; font-weight: bold;">Checkfront not configured!</p>';
 		}
+		
+		$root_dir = JPATH_SITE . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . 'checkfront'. DIRECTORY_SEPARATOR;
+		include_once($root_dir . 'CheckfrontWidget.php');
+		
+		$Checkfront = new CheckfrontWidget(
+			array(
+				'host' => $host,
+				'pipe_url'=> JURI::base() . $this->path . 'pipe.html',
+				'provider' => 'joomla',
+				'load_msg'=> JText::_('PLG_CONTENT_CHECKFRONT_SEARCHING_AVAILABILITY'),
+				'continue_msg' => JText::_('PLG_CONTENT_CHECKFRONT_CONTINUE_BOOKING'),
+			)
+		);
+		
+		$config = array(
+			'category_id' => '0',
+			'item_id' => '0',
+			'tid' => '',
+			'discount' => '',
+			'options' => '',
+			'style' => '',
+			'width' => '',
+			'theme' => '',
+			'category_id' => '',
+			'item_id' => '',
+			'widget_id' => time()
+		);
+
+		$this->parseShortcode($shortcode[1], $config);
+		
+		$doc = JFactory::getDocument();
+		$doc->addScript('//' . $host . '/lib/interface--' . $Checkfront->interface_build . '.js');
+		
+		return $Checkfront->render($config);
 	}
 
-	protected function shortcode($text,&$cnf) {
+	
+	protected function parseShortcode($text,&$cnf) {
 		$atts = array();
 		$pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
 		$text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
