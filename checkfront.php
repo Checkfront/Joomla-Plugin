@@ -2,7 +2,7 @@
 /**
 * @package		Joomla.Plugin
 * @subpackage   Content.Checkfront
-* @version 	    2.3
+* @version 	    2.9
 * @copyright	Copyright (C) 2008-2013 Checkfront Inc. All rights reserved.
 * @license		GNU/GPL, see LICENSE.php
 * @link 		https://github.com/Checkfront/Joomla-Plugin
