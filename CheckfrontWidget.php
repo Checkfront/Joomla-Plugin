@@ -4,9 +4,9 @@
  * PHP 5 
  *
  * @package     CheckfrontWidget
- * @version     2.3
+ * @version     2.9.1
  * @author      Checkfront <code@checkfront.com>
- * @copyright   2008-2013 Checkfront Inc 
+ * @copyright   2008-2014 Checkfront Inc 
  * @license     http://opensource.org/licenses/bsd-license.php New BSD License
  * @link        http://www.checkfront.com/developers/
  * @link        https://github.com/Checkfront/PHP-Widget
@@ -54,8 +54,8 @@
 
 class CheckfrontWidget {
 
-	public $version = '2.5';
-	public $interface_build = '15';
+	public $version = '2.9';
+	public $interface_version = '22';
 	public $host= '';
 	public $src = '';
 	public $plugin_url = '';
@@ -184,12 +184,16 @@ class CheckfrontWidget {
 		$cnf = array(
 			'widget_id'=>'',
 			'item_id'=>'',
+			'filter_category_id'=>'',
 			'category_id'=>'',
 			'theme'=>'',
 			'layout'=>'',
+			'discount_code'=>'',
+			'lang_id'=>'',
 			'tid'=>'',
 			'options'=>'',
 			'date'=>'',
+			'end_date'=>'',
 			'style'=>'',
 			'host'=>'',
 		);
@@ -203,11 +207,13 @@ class CheckfrontWidget {
 		}
 
 		$cnf['widget_id'] = (isset($cnf['widget_id']) and $cnf['widget_id'] > 0) ? $cnf['widget_id'] : '01';
-		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->interface_build}-->\n";
+		$html = "\n<!-- CHECKFRONT BOOKING PLUGIN v{$this->interface_version}-->\n";
 		$html .= '<div id="CHECKFRONT_WIDGET_' . $cnf['widget_id'] . '"><p id="CHECKFRONT_LOADER" style="background: url(\'//' . $this->host . '/images/loader.gif\') left center no-repeat; padding: 5px 5px 5px 20px">' . $this->load_msg . '...</p></div>';
-		$html .= "\n<script type='text/javascript'>\nnew CHECKFRONT.Widget ({\n";
+		$html .= "\n<script>\nnew CHECKFRONT.Widget ({\n";
 		$html .= "host: '{$this->host}',\n";
-		$html .= "pipe: '{$this->pipe_url}',\n";
+		if($this->pipe_url) {
+			$html .= "pipe: '{$this->pipe_url}',\n";
+		}
 		$html .= "target: 'CHECKFRONT_WIDGET_{$cnf['widget_id']}',\n";
 
 		// optional, or default items.  can be sku or category_id
@@ -220,12 +226,20 @@ class CheckfrontWidget {
 			$cnf['category_id'] = $this->set_ids($cnf['category_id']);
 			$html .= "category_id: '{$cnf['category_id']}',\n";
 		}	
+		//optional category_id(s)
+		if($cnf['filter_category_id']) {
+			$cnf['filter_category_id'] = $this->set_ids($cnf['filter_category_id']);
+			$html .= "filter_category_id: '{$cnf['filter_category_id']}',\n";
+		}
 		if($cnf['theme']) $html .= "theme: '{$this->theme}',\n";
 		if($cnf['width'] and $cnf['width'] > 0)  $html .= "width: '{$cnf['width']}',\n";
 		if($cnf['layout'])  $html .= "layout: '{$cnf['layout']}',\n";
 		if($cnf['tid'])  $html .= "tid: '{$cnf['tid']}',\n";
+		if($cnf['discount_code'])  $html .= "discount_code: '{$cnf['discount_code']}',\n";
+		if($cnf['lang_id'])  $html .= "lang_id: '{$cnf['lang_id']}',\n";
 		if($cnf['options'])  $html.= "options: '{$cnf['options']}',\n";
 		if($cnf['date'])  $html.= "date: '{$cnf['date']}',\n";
+		if($cnf['end_date'])  $html.= "end_date: '{$cnf['end_date']}',\n";
 		if($cnf['style'])  $html .= "style: '{$cnf['style']}',\n";
 		$html .= "provider: '{$this->provider}'\n";
 		$html .="}).render();\n</script>\n";
