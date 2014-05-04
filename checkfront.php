@@ -51,7 +51,7 @@ class plgContentCheckfront extends JPlugin {
 			return true;
 		}
 		
-		$article->text = preg_replace_callback('/[\[|{]checkfront(.*?)[\]|}]/iU', array($this, 'renderWidget'), $article->text, 1);
+		$article->text = preg_replace_callback('/[\[|{]checkfront(.*?)[\]|}]/iU', array($this, 'renderWidget'), $article->text);
 	}
 	
 	
