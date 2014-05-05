@@ -89,7 +89,7 @@ class plgContentCheckfront extends JPlugin {
 			'category_id' => '',
 			'item_id' => '',
 			'lang_id' => '',
-			'widget_id' => time()
+			'widget_id' => uniqid()
 		);
 
 		$this->parseShortcode($shortcode[1], $config);
