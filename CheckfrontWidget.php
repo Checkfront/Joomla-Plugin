@@ -7,7 +7,7 @@
  * @version     3.0
  * @author      Checkfront <code@checkfront.com>
  * @copyright   2008-2014 Checkfront Inc 
- * @license     http://opensource.org/licenses/bsd-license.php New BSD License
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link        http://www.checkfront.com/developers/
  * @link        https://github.com/Checkfront/PHP-Widget
  *

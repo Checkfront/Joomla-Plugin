@@ -8,14 +8,13 @@ of Joomla with the power of Checkfront.
 
 This plugin is for Joomla 1.6 or greater (tested to 3.0).  
 
-Except as otherwise noted, the Checkfront Joomla Plugin is licensed under the Apache Licence, Version 2.0
-(http://www.apache.org/licenses/LICENSE-2.0.html)
+Except as otherwise noted, the Checkfront Joomla Plugin is licensed under the [GNU General Public License](http://www.gnu.org/copyleft/gpl.html)
 
 Usage
 -----
 
 Once installed and configured, you can render a booking window anywhere in your site by creating a new article, and 
-supplying the checkfront shortcode: [checkfront]. 
+supplying the checkfront shortcode: [checkfront] 
 
 ```html
 <h2>Booking Online!</h2>
@@ -39,5 +38,5 @@ You can further customize how the booking portal renders by supplying options to
 <!-- Use a custom background and font-->
 [checkfront style="background-color: #000;color:#fff;font-family:Tahoma; width:800"]
 ```
-For a full list of of available options please the setup guide: [Online Bookings with Joomla and Checkfront](http://www.checkfront.com/joomla/);
+For a full list of of available options please the setup guide: [Online Bookings with Joomla and Checkfront](http://www.checkfront.com/joomla/)
 
