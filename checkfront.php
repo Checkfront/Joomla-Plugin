@@ -40,17 +40,12 @@ class plgContentCheckfront extends JPlugin {
 		JPlugin::loadLanguage('plg_content_checkfront');
 
 		// Don't run this plugin when the content is being indexed
-		if ($context != 'com_content.article') {
-			if(isset($article->readmore_link)) {
-				$link = '<a href="' . urlencode($article->readmore_link) . '">" . PLG_CONTENT_CHECKFRONT_CONTINUE_BOOKING . "</a>';
-			} else {
-				$link = '';
-			}
-
+		if($context != 'com_content.article' && isset($article->readmore_link)) {
+			$link = '<a href="' . urlencode($article->readmore_link) . '">' . JText::_('PLG_CONTENT_CHECKFRONT_CONTINUE_BOOKING') . '</a>';
 			$article->text = preg_replace('/[\[|{]checkfront(.*?)[\]|}]/iU', $link, $article->text);
 			return true;
 		}
-		
+
 		$article->text = preg_replace_callback('/[\[|{]checkfront(.*?)[\]|}]/iU', array($this, 'renderWidget'), $article->text);
 	}
 	
@@ -63,7 +58,7 @@ class plgContentCheckfront extends JPlugin {
 		if (!$host) {
 			return '<p style="padding:1em; border: solid 1px firebrick; font-weight: bold;">Checkfront not configured!</p>';
 		}
-		
+
 		$root_dir = JPATH_SITE . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . 'checkfront'. DIRECTORY_SEPARATOR;
 		include_once($root_dir . 'CheckfrontWidget.php');
 		
@@ -93,10 +88,10 @@ class plgContentCheckfront extends JPlugin {
 		);
 
 		$this->parseShortcode($shortcode[1], $config);
-		
+
 		$doc = JFactory::getDocument();
 		$doc->addScript('//' . $host . '/lib/interface--' . $Checkfront->interface_version . '.js');
-		
+
 		return $Checkfront->render($config);
 	}
 
