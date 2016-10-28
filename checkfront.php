@@ -17,11 +17,6 @@
 
 /**
  * Embed a Checkfront booking window into a Joomla page.
- *
- * @param object|string to be sourced 
- * @param array Additional parameters. See {@see plgCheckfront()}.
- * @param int Optional page number. Unused. Defaults to zero.
- * @return boolean True on success.
  */
 
 
@@ -30,10 +25,11 @@ class plgContentCheckfront extends JPlugin {
 	private $path = 'plugins/content/checkfront/';
 	
 	/**
-	 * @param   string  The context of the content being passed to the plugin.
-	 * @param   object  The article object.  Note $article->text is also available
-	 * @param   object  The article params
-	 * @param   int     The 'page' number
+	 * @param   string $context The context of the content being passed to the plugin.
+	 * @param   object $article The article object.  Note $article->text is also available
+	 * @param   object $params The article params
+	 * @param   int $page
+	 * @return bool
 	 */
 	public function onContentPrepare($context, &$article, &$params, $page = 0) {
 
@@ -73,17 +69,6 @@ class plgContentCheckfront extends JPlugin {
 		);
 		
 		$config = array(
-			'category_id' => '0',
-			'item_id' => '0',
-			'tid' => '',
-			'discount' => '',
-			'options' => '',
-			'style' => '',
-			'width' => '',
-			'theme' => '',
-			'category_id' => '',
-			'item_id' => '',
-			'lang_id' => '',
 			'widget_id' => uniqid()
 		);
 
